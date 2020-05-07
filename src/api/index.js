@@ -1,46 +1,49 @@
 import axios from 'axios';
 
-const url = 'https://covid19.mathdro.id/api';
-
-export const getGlobalSummary = async () => {
+export const getGlobalData = async () => {
 	try {
-		const { data } = await axios.get(url);
-		const obj = {
-			name: 'Global',
-			confirmed: data.confirmed,
-			recovered: data.recovered,
-			deaths: data.deaths,
-			lastUpdate: data.lastUpdate,
-		};
-		return obj;
+		const response = await axios.get('https://covid19.mathdro.id/api');
+		const processed = processGlobalData(response.data);
+		return processed;
 	} catch (error) {
-		console.log(`error fetching ${url}`, error);
+		console.log(`error fetching https://covid19.mathdro.id/api`, error);
 	}
 };
 
-export const getCountries = async () => {
+export const getCountryData = async () => {
 	try {
-		const {
-			data: { countries },
-		} = await axios.get(`${url}/countries`);
-		return countries;
+		const response = await axios.get('https://corona-api.com/countries');
+		const processed = processCountryData(response.data.data);
+		return processed;
 	} catch (error) {
-		console.log(`error fetching ${url}/countries`, error);
+		console.log(`error fetching https://corona-api.com/countries`, error);
 	}
 };
 
-export const getCountrySummary = async name => {
-	try {
-		const { data } = await axios.get(`${url}/countries/${name}`);
+const processGlobalData = data => {
+	const output = {
+		name: 'Global',
+		confirmed: data.confirmed.value,
+		recovered: data.recovered.value,
+		deaths: data.deaths.value,
+		lastUpdate: data.lastUpdate,
+	};
+	return output;
+};
+
+const processCountryData = data => {
+	let output = [];
+	for (const d of data) {
 		const obj = {
-			name: name,
-			confirmed: data.confirmed,
-			recovered: data.recovered,
-			deaths: data.deaths,
-			lastUpdate: data.lastUpdate,
+			name: d.name,
+			latitude: d.coordinates.latitude,
+			longitude: d.coordinates.longitude,
+			confirmed: d.latest_data.confirmed,
+			recovered: d.latest_data.recovered,
+			deaths: d.latest_data.deaths,
+			lastUpdate: d.updated_at,
 		};
-		return obj;
-	} catch (error) {
-		console.log(`error fetching ${url}/countries/${name}`, error);
+		output = [...output, obj];
 	}
+	return output;
 };

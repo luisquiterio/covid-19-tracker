@@ -8,33 +8,24 @@ const token =
 
 const Map = () => {
 	return (
-		<div>
-			<Card className="card confirmed">
-				<CardContent>
-					<Typography gutterBottom>Total confirmed</Typography>
-					<ReactMapGL
-						width="100%"
-						height={300}
-						latitude={0}
-						longitude={0}
-						zoom={1}
-						mapboxApiAccessToken={token}
-						mapStyle="mapbox://styles/mapbox/light-v10"
-					>
-						<Marker longitude={0} latitude={0}>
-							<div
-								style={{
-									backgroundColor: '#00a9e0',
-									borderRadius: '50%',
-									height: 25,
-									width: 25,
-								}}
-							/>
-						</Marker>
-					</ReactMapGL>
-				</CardContent>
-			</Card>
-		</div>
+		<Card className="confirmed">
+			<CardContent>
+				<Typography gutterBottom>Total confirmed cases</Typography>
+				<ReactMapGL
+					width="100%"
+					height={300}
+					latitude={0}
+					longitude={0}
+					zoom={1}
+					mapboxApiAccessToken={token}
+					mapStyle="mapbox://styles/mapbox/light-v10"
+				>
+					<Marker longitude={0} latitude={0}>
+						<div className="marker" />
+					</Marker>
+				</ReactMapGL>
+			</CardContent>
+		</Card>
 	);
 };
 

@@ -10,13 +10,12 @@ import CountUp from 'react-countup';
 import './Cards.css';
 
 const Cards = props => {
-	const { data, dataLoaded, value } = props;
+	const { data, dataLoaded } = props;
 
 	if (!dataLoaded) {
 		return <LinearProgress></LinearProgress>;
 	}
 
-	const obj = data.find(e => e.name === value);
 	return (
 		<Grid container spacing={2} justify="space-between">
 			<Grid item>
@@ -28,15 +27,15 @@ const Cards = props => {
 						<Typography variant="h4">
 							<CountUp
 								start={0}
-								end={obj.confirmed.value}
+								end={data.confirmed}
 								duration={3}
 								separator=","
 							></CountUp>
 						</Typography>
 						<Typography color="textSecondary" gutterBottom>
-							{new Date(obj.lastUpdate).toDateString()}
+							{new Date(data.lastUpdate).toDateString()}
 						</Typography>
-						<Typography>{obj.name}</Typography>
+						<Typography>{data.name}</Typography>
 					</CardContent>
 				</Card>
 			</Grid>
@@ -49,15 +48,15 @@ const Cards = props => {
 						<Typography variant="h4">
 							<CountUp
 								start={0}
-								end={obj.recovered.value}
+								end={data.recovered}
 								duration={2}
 								separator=","
 							></CountUp>
 						</Typography>
 						<Typography color="textSecondary" gutterBottom>
-							{new Date(obj.lastUpdate).toDateString()}
+							{new Date(data.lastUpdate).toDateString()}
 						</Typography>
-						<Typography>{obj.name}</Typography>
+						<Typography>{data.name}</Typography>
 					</CardContent>
 				</Card>
 			</Grid>
@@ -70,15 +69,15 @@ const Cards = props => {
 						<Typography variant="h4">
 							<CountUp
 								start={0}
-								end={obj.deaths.value}
+								end={data.deaths}
 								duration={1}
 								separator=","
 							></CountUp>
 						</Typography>
 						<Typography color="textSecondary" gutterBottom>
-							{new Date(obj.lastUpdate).toDateString()}
+							{new Date(data.lastUpdate).toDateString()}
 						</Typography>
-						<Typography>{obj.name}</Typography>
+						<Typography>{data.name}</Typography>
 					</CardContent>
 				</Card>
 			</Grid>
