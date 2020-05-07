@@ -57,7 +57,7 @@ class App extends React.Component {
 						dataLoaded={dataLoaded}
 					></Cards>
 					<h1>Map</h1>
-					<Map></Map>
+					<Map data={countryData} dataLoaded={dataLoaded}></Map>
 				</div>
 			</div>
 		);
