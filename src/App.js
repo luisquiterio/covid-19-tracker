@@ -2,74 +2,74 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import { getGlobalSummary, getCountries, getCountrySummary } from './api';
 import Cards from './components/Cards/Cards';
+import Selector from './components/Selector/Selector';
 import Map from './components/Map/Map';
 import './App.css';
 
 class App extends React.Component {
 	state = {
-		globalSummaryData: [],
-		countrySummaryData: [],
+		globalData: [],
+		countryData: [],
+		countryNames: [],
 		dataLoaded: false,
-		currentCountry: 'US',
+		country: 'US',
 	};
 
 	async componentDidMount() {
-		const globalSummary = await getGlobalSummary();
-		this.setState({
-			globalSummaryData: [...this.state.globalSummaryData, globalSummary],
-		});
+		const globalData = await getGlobalSummary();
+		this.setState({ globalData: [globalData] });
 
 		const countries = await getCountries();
+		const countryNames = countries.map(c => c.name);
+		this.setState({ countryNames });
 
-		let index = 0;
-		for (const c of countries) {
-			const countrySummary = await getCountrySummary(c.name);
-			if (countrySummary !== undefined) {
+		// can we lazy load this information?
+		for (const name of countryNames) {
+			const data = await getCountrySummary(name);
+			if (data) {
 				this.setState({
-					countrySummaryData: [
-						...this.state.countrySummaryData,
-						countrySummary,
-					],
+					countryData: [...this.state.countryData, data],
 				});
 			}
-			if (index === countries.length - 1) {
-				this.setState({ dataLoaded: true });
-			}
-			index++;
 		}
+		this.setState({ dataLoaded: true });
 	}
+
+	handleCountryChange = country => {
+		this.setState({ country: country });
+	};
 
 	render() {
 		const {
-			globalSummaryData,
-			countrySummaryData,
+			globalData,
+			countryData,
+			countryNames,
 			dataLoaded,
-			currentCountry,
+			country,
 		} = this.state;
 
 		return (
 			<div className="App">
 				<div className="container">
 					<h1>Global Summary</h1>
-					<div className="card-section">
-						<Cards
-							data={globalSummaryData}
-							dataLoaded={dataLoaded}
-							countryId="Global"
-						></Cards>
-					</div>
-					<div className="card-section">
-						<h1>Country Summary</h1>
-						<Cards
-							data={countrySummaryData}
-							dataLoaded={dataLoaded}
-							countryId={currentCountry}
-						></Cards>
-					</div>
+					<Cards
+						data={globalData}
+						dataLoaded={dataLoaded}
+						value="Global"
+					></Cards>
+					<h1>Country Summary</h1>
+					<Selector
+						data={countryNames}
+						value={country}
+						handleCountryChange={this.handleCountryChange}
+					></Selector>
+					<Cards
+						data={countryData}
+						dataLoaded={dataLoaded}
+						value={country}
+					></Cards>
 					<h1>Map</h1>
-					<div className="map-section">
-						<Map></Map>
-					</div>
+					<Map></Map>
 				</div>
 			</div>
 		);

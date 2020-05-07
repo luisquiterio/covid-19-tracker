@@ -10,14 +10,13 @@ import CountUp from 'react-countup';
 import './Cards.css';
 
 const Cards = props => {
-	const { data, dataLoaded, countryId } = props;
+	const { data, dataLoaded, value } = props;
 
 	if (!dataLoaded) {
 		return <LinearProgress></LinearProgress>;
 	}
 
-	const current = data.find(el => el.name === countryId);
-
+	const obj = data.find(e => e.name === value);
 	return (
 		<Grid container spacing={2} justify="space-between">
 			<Grid item>
@@ -29,15 +28,15 @@ const Cards = props => {
 						<Typography variant="h4">
 							<CountUp
 								start={0}
-								end={current.confirmed.value}
+								end={obj.confirmed.value}
 								duration={3}
 								separator=","
 							></CountUp>
 						</Typography>
 						<Typography color="textSecondary" gutterBottom>
-							{new Date(current.lastUpdate).toDateString()}
+							{new Date(obj.lastUpdate).toDateString()}
 						</Typography>
-						<Typography>{current.name}</Typography>
+						<Typography>{obj.name}</Typography>
 					</CardContent>
 				</Card>
 			</Grid>
@@ -50,15 +49,15 @@ const Cards = props => {
 						<Typography variant="h4">
 							<CountUp
 								start={0}
-								end={current.recovered.value}
+								end={obj.recovered.value}
 								duration={2}
 								separator=","
 							></CountUp>
 						</Typography>
 						<Typography color="textSecondary" gutterBottom>
-							{new Date(current.lastUpdate).toDateString()}
+							{new Date(obj.lastUpdate).toDateString()}
 						</Typography>
-						<Typography>{current.name}</Typography>
+						<Typography>{obj.name}</Typography>
 					</CardContent>
 				</Card>
 			</Grid>
@@ -71,15 +70,15 @@ const Cards = props => {
 						<Typography variant="h4">
 							<CountUp
 								start={0}
-								end={current.deaths.value}
+								end={obj.deaths.value}
 								duration={1}
 								separator=","
 							></CountUp>
 						</Typography>
 						<Typography color="textSecondary" gutterBottom>
-							{new Date(current.lastUpdate).toDateString()}
+							{new Date(obj.lastUpdate).toDateString()}
 						</Typography>
-						<Typography>{current.name}</Typography>
+						<Typography>{obj.name}</Typography>
 					</CardContent>
 				</Card>
 			</Grid>
